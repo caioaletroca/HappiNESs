@@ -1,2 +1,2 @@
 # HappiNESs
-A NES emulator written in C#
+A NES emulator written in C# for learning purposes.
