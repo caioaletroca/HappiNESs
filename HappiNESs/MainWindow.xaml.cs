@@ -23,6 +23,9 @@ namespace HappiNESs
         public MainWindow()
         {
             InitializeComponent();
+
+            var cpu = new CPU();
+            var cart = new Cartridge("instr_misc.nes");
         }
     }
 }
