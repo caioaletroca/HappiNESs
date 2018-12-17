@@ -1,0 +1,4 @@
+language: csharp
+solution: HappiNESs.sln
+install:
+	- nuget restore HappiNESs.sln
