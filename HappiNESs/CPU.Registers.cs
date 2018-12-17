@@ -33,6 +33,8 @@ namespace HappiNESs
 
             public bool Decimal { get; set; }
 
+            public bool BreakSource { get; set; }
+
             public bool Overflow { get; set; }
 
             public bool Negative { get; set; }
@@ -87,15 +89,18 @@ namespace HappiNESs
             set => mSP = (value & 0xFF);
         }
 
+        /// <summary>
+        /// The Process Status registers. Hold information about several flags in the system
+        /// </summary>
         public uint P
         {
             get => (uint)(
                     (Flags.Carry.ToByte() << 0) |
                     (Flags.Zero.ToByte() << 1) |
                     (Flags.InterruptDisable.ToByte() << 2) |
-                    (Flags.Decimal.ToByte() << 4) |
+                    (Flags.Decimal.ToByte() << 3) |
+                    (Flags.BreakSource.ToByte() << 4) |
                     (1 << 5) |
-                    (1 << 6) |
                     (Flags.Overflow.ToByte() << 6) |
                     (Flags.Negative.ToByte() << 7)
                 );
@@ -105,6 +110,7 @@ namespace HappiNESs
                 Flags.Zero = (value & 0x2) > 0;
                 Flags.InterruptDisable = (value & 0x4) > 0;
                 Flags.Decimal = (value & 0x8) > 0;
+                Flags.BreakSource = (value & 0x10) > 0;
                 Flags.Overflow = (value & 0x40) > 0;
                 Flags.Negative = (value & 0x80) > 0;
             }
