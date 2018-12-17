@@ -129,6 +129,12 @@ namespace HappiNESs
             
         }
 
+
+        private void DEX()
+        {
+
+        }
+
         #endregion
 
         #region Bitwise Instructions
