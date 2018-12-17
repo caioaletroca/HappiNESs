@@ -3,11 +3,13 @@
     /// <summary>
     /// The Main core for the CPU 6502
     /// </summary>
-    sealed partial class CPU
+    internal sealed partial class CPU
     {
         #region Public Properties
 
         public int Cycle;
+
+        public byte[] RAM = new byte[0x800];
 
         #endregion
 

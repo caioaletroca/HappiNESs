@@ -36,7 +36,7 @@ namespace HappiNESs
             Rom = File.ReadAllBytes(path);
 
             // Check if the rom has the iNES header
-            int header = BitConverter.ToInt32(Rom, 0);
+            var header = BitConverter.ToInt32(Rom, 0);
             if (header != 0x1A53454E)
                 throw new FormatException($"Unexpected file header for {path}");
 
