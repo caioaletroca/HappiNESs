@@ -13,15 +13,21 @@ namespace HappiNESs
         /// <summary>
         /// The raw ROM loaded as an array of <see cref="byte"/>
         /// </summary>
-        private readonly byte[] Rom;
+        public readonly byte[] Rom;
 
-        private readonly int PRGROM;
+        public readonly int PRGROMSize;
 
-        private readonly int CHRROM;
+        public readonly int CHRROMSize;
 
-        private readonly int PRGRAM;
+        public readonly int PRGRAMSize;
 
-        private readonly byte Flag6;
+        public readonly byte Flag6;
+
+        public readonly byte PRGROMOffset;
+
+        public readonly byte[] PRGROM;
+
+        public readonly byte[] CHRROM;
 
         #endregion
 
@@ -41,12 +47,24 @@ namespace HappiNESs
                 throw new FormatException($"Unexpected file header for {path}");
 
             // Get sizes
-            PRGROM = Rom[4] * 0x4000; // 16kb units
-            CHRROM = Rom[5] * 0x2000; // 8kb units
-            PRGRAM = Rom[8] * 0x2000;
+            PRGROMSize = Rom[4] * 0x4000; // 16kb units
+            CHRROMSize = Rom[5] * 0x2000; // 8kb units
+            PRGRAMSize = Rom[8] * 0x2000;
 
             // Get flags
             Flag6 = Rom[6];
+
+            PRGROMOffset = 16;
+
+            PRGROM = new byte[PRGROMSize];
+            Array.Copy(Rom, PRGROMOffset, PRGROM, 0, PRGROMSize);
+
+            if (CHRROMSize == 0)
+                CHRROM = new byte[0x200];
+            else
+            {
+                CHRROM = new byte[CHRROMSize];
+            }
         }
 
         #endregion

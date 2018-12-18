@@ -11,12 +11,19 @@ namespace HappiNESs
     {
         #region Public Properties
 
+        /// <summary>
+        /// The current CPU cycle
+        /// </summary>
         public int Cycle;
 
+        /// <summary>
+        /// The current loaded opcode
+        /// </summary>
         public uint CurrentOpcode { get; set; }
 
-        public uint Operand { get; set; }
-
+        /// <summary>
+        /// The memory RAM
+        /// </summary>
         public byte[] Ram { get; set; } = new byte[0x800];
 
         #endregion
@@ -29,7 +36,17 @@ namespace HappiNESs
 
         #region Private Properties
 
+
+        private readonly NESConsole NESConsole;
+
+        /// <summary>
+        /// The array containing all the CPU opcodes
+        /// </summary>
         private readonly Opcode[] Opcodes = new Opcode[256];
+
+        /// <summary>
+        /// The array containing all the CPU opcodes definitions
+        /// </summary>
         private readonly OpcodeDefinition[] OpcodeDefinitions = new OpcodeDefinition[256];
 
         #endregion
@@ -39,11 +56,13 @@ namespace HappiNESs
         /// <summary>
         /// Default constructor
         /// </summary>
-        public CPU() : base(0xFFFF)
+        public CPU(NESConsole console) : base(0xFFFF)
         {
             InitializeMemoryMap();
             InitializeOpcodes();
             Initialize();
+
+            NESConsole = console;
         }
 
         /// <summary>

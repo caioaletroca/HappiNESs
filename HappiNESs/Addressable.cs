@@ -77,6 +77,11 @@ namespace HappiNESs
             return ReadMap[Address](Address);
         }
 
+        /// <summary>
+        /// Writes a single byte using the memory mappings system
+        /// </summary>
+        /// <param name="Address"></param>
+        /// <param name="Value"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteByte(uint Address, uint Value)
         {
@@ -85,6 +90,17 @@ namespace HappiNESs
 
             // Writes to the memory
             WriteMap[Address](Address, (byte)Value);
+        }
+
+        /// <summary>
+        /// Reads a word using the memory mappings system
+        /// </summary>
+        /// <param name="Address"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public uint ReadWord(uint Address)
+        {
+            return ReadByte(Address) | (ReadByte(Address + 1) << 8);
         }
 
         #endregion

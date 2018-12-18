@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using static HappiNESs.CPU.AddressingModes;
 
 namespace HappiNESs
@@ -50,10 +51,10 @@ namespace HappiNESs
 
             // Generate Mappers
             MapReadHandler(0x0000, 0x1FFF, addr => Ram[addr & 0x07FF]);
+            MapReadHandler(0x4000, 0x4017, ReadIORegister);
 
             MapWriteHandler(0x0000, 0x1FFF, (addr, value) => Ram[addr & 0x07FF] = value);
-
-            // TODO: Mapper initialization
+            MapWriteHandler(0x4000, 0x4017, WriteIORegister);
         }
 
         #endregion
@@ -75,7 +76,31 @@ namespace HappiNESs
                     return (NextByte() + Y) & 0xFF;
                 case Absolute:
                     return NextWord();
+                case AbsoluteX:
+                    var Address = NextWord();
 
+                    // Handle page boundary
+                    if (def.PageBoundary && (Address & 0xFF00) != ((Address + X) & 0xFF00))
+                        Cycle++;
+                    return Address + X;
+                case AbsoluteY:
+                    Address = NextWord();
+
+                    // Handle page boundary
+                    if (def.PageBoundary && (Address & 0xFF00) != ((Address + Y) & 0xFF00))
+                        Cycle++;
+                    return Address + Y;
+                case IndirectX:
+                    var Offset = (NextByte() + X) & 0xFF;
+                    return ReadByte(Offset) | (ReadByte((Offset + 1) & 0xFF) << 8);
+                case IndirectY:
+                    Offset = NextByte() & 0xFF;
+                    Address = ReadByte(Offset) | (ReadByte((Offset + 1) & 0xFF) << 8);
+
+                    // Handle page boundary
+                    if (def.PageBoundary && (Address & 0xFF00) != ((Address + Y) & 0xFF00))
+                        Cycle++;
+                    return (Address + Y) & 0xFFFF;
             }
 
             // If no address mode found
@@ -131,6 +156,42 @@ namespace HappiNESs
         /// </summary>
         /// <returns></returns>
         public uint NextWord() => NextByte() | (NextByte() << 8);
+
+        #endregion
+
+        #region Stack Methods
+
+        /// <summary>
+        /// Pushs a value to the stack
+        /// </summary>
+        /// <param name="Value">The value to insert</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void Push(uint Value) => WriteByte(SP--, Value);
+
+        /// <summary>
+        /// Pops a value from the stack
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private uint Pop() => ReadByte(++SP);
+
+        /// <summary>
+        /// Pushs a word value to the stack
+        /// </summary>
+        /// <param name="Value">The value to insert</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private void PushWord(uint Value)
+        {
+            Push(Value >> 8);
+            Push(Value & 0xFF);
+        }
+
+        /// <summary>
+        /// Pops a word value from the stack
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private uint PopWord() => Pop() | (Pop() << 8);
 
         #endregion
     }

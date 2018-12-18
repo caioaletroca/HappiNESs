@@ -74,6 +74,7 @@
     <Compile Include="CPU.Core.cs" />
     <Compile Include="CPU.cs" />
     <Compile Include="CPU.Instructions.cs" />
+    <Compile Include="CPU.IORegisters.cs" />
     <Compile Include="CPU.Memory.cs" />
     <Compile Include="CPU.Registers.cs" />
     <Compile Include="Extensions\ArrayExtension.cs" />
@@ -84,6 +85,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mappers\BaseMappers.cs" />
+    <Compile Include="Mappers\NROM.cs" />
     <Compile Include="NESConsole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

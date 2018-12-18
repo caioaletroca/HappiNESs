@@ -90,6 +90,16 @@ namespace HappiNESs
         }
 
         /// <summary>
+        /// Handles the Negative and the Zero flags setting
+        /// </summary>
+        /// <param name="Value">The value to be analyzed</param>
+        public void HandleFlags(uint Value)
+        {
+            Flags.Zero = (Value & 0xFF) == 0;
+            Flags.Negative = (Value & 0x80) > 0;
+        }
+
+        /// <summary>
         /// The Process Status registers. Hold information about several flags in the system
         /// </summary>
         public uint P
