@@ -166,14 +166,18 @@ namespace HappiNESs
         /// </summary>
         /// <param name="Value">The value to insert</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Push(uint Value) => WriteByte(SP--, Value);
+        private void Push(uint Value) => WriteByte(0x100 + (SP--), Value);
 
         /// <summary>
         /// Pops a value from the stack
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private uint Pop() => ReadByte(++SP);
+        private uint Pop()
+        {
+            SP++;
+            return ReadByte(0x100 + SP);
+        }
 
         /// <summary>
         /// Pushs a word value to the stack

@@ -56,7 +56,7 @@ namespace HappiNESs
         {
             get => mA;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => mA = (value & 0xFF);
+            set => mA = HandleFlags(value & 0xFF);
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace HappiNESs
         {
             get => mX;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => mX = (value & 0xFF);
+            set => mX = HandleFlags(value & 0xFF);
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace HappiNESs
         {
             get => mY;
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            set => mY = (value & 0xFF);
+            set => mY = HandleFlags(value & 0xFF);
         }
 
         /// <summary>
@@ -93,10 +93,11 @@ namespace HappiNESs
         /// Handles the Negative and the Zero flags setting
         /// </summary>
         /// <param name="Value">The value to be analyzed</param>
-        public void HandleFlags(uint Value)
+        public uint HandleFlags(uint Value)
         {
             Flags.Zero = (Value & 0xFF) == 0;
             Flags.Negative = (Value & 0x80) > 0;
+            return Value;
         }
 
         /// <summary>
