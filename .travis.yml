@@ -1,2 +1,3 @@
 language: csharp
 solution: HappiNESs.sln
+dotnet: 4.6.1

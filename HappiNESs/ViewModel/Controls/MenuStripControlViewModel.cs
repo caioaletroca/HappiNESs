@@ -64,9 +64,10 @@ namespace HappiNESs
             await RunCommandAsync(() => IsBusy, async () =>
             {
                 // Run async
-                await IoC.Task.Run(() =>
+                await IoC.Task.Run(async () =>
                 {
-
+                    // Load the rom
+                    await IoC.Application.LoadRomAsync($"{result.FilePath}\\{result.FileName}");
                 });
             });
         }

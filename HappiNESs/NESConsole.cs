@@ -41,7 +41,10 @@
         /// <param name="path">The path to the file</param>
         public void LoadRom(string path)
         {
+            // Create the cartridge
             Cartridge = new Cartridge(path);
+
+            // Create the new mapper
             Mapper = new NROM(this);
         }
 
