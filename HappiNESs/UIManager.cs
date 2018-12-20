@@ -84,7 +84,7 @@ namespace HappiNESs
         /// Creates a instance of System Save File Dialog window
         /// </summary>
         /// <returns></returns>
-        public SystemDialogResult SaveFileDialog(string Filter = "", string FileName = ApplicationConstants.DefaultExperimentFileName)
+        public SystemDialogResult SaveFileDialog(string Filter = "", string FileName = "")
         {
             // Create the new dialog
             var dialog = new SaveFileDialog

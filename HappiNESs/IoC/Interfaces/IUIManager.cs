@@ -39,7 +39,7 @@ namespace HappiNESs
         /// </summary>
         /// <param name="Filter">The file filter</param>
         /// <returns></returns>
-        SystemDialogResult SaveFileDialog(string Filter = "", string FileName = ApplicationConstants.DefaultExperimentFileName);
+        SystemDialogResult SaveFileDialog(string Filter = "", string FileName = "");
 
         #endregion
 
