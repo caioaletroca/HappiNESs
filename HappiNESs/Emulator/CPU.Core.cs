@@ -1,9 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 
 namespace HappiNESs
 {
     internal sealed partial class CPU
     {
+        #region Public Properties
+
+        /// <summary>
+        /// The current CPU state
+        /// </summary>
+        public CPUState State { get; set; }
+
+        #endregion
+
         #region Private Properties
 
         /// <summary>
@@ -68,6 +80,9 @@ namespace HappiNESs
             
             // Get the new opcode
             CurrentOpcode = NextByte();
+
+            State = GetState();
+
             var opcode = Opcodes[CurrentOpcode];
             if (opcode == null)
                 throw new ArgumentException();
@@ -80,6 +95,50 @@ namespace HappiNESs
 
             // Run opcode
             opcode();
+        }
+
+        /// <summary>
+        /// Test the CPU with the nestest.nes
+        /// </summary>
+        /// <returns></returns>
+        public bool CPUTest()
+        {
+            var Result = false;
+
+            // Offset PC
+            PC = 0xC000;
+
+            // Get the logs
+            var NestestLog = GetNestestLog("nestest.txt");
+
+            var CurrentLine = 0;
+            
+            try
+            {
+                for (var i = 0; i < NestestLog.Count; i++)
+                {   
+                    // Run one cycle
+                    ExecuteInstruction();
+
+                    // Check if states is differents
+                    if (NestestLog[CurrentLine] != State)
+                        Debugger.Break();
+
+                    // Increments counter
+                    CurrentLine++;
+                }
+
+                Result = true;
+            }
+            catch (Exception e)
+            {
+                // Log
+                IoC.Logger.Log(e.Message, LogLevel.Error);
+
+                Result = false;
+            }
+
+            return Result;
         }
 
         #endregion
@@ -128,6 +187,63 @@ namespace HappiNESs
         {
             if (!Flags.InterruptDisable || Type == InterruptTypes.NMI)
                 Interrupts[(int)Type] = true;
+        }
+
+        #endregion
+
+        #region Test Methods
+
+        /// <summary>
+        /// Opens and loads the nestest.nes logs file
+        /// </summary>
+        /// <param name="path">The path to the file</param>
+        /// <returns></returns>
+        public List<CPUState> GetNestestLog(string path)
+        {
+            // Loads the Checking file
+            var TestList = new List<CPUState>();
+            using (var fileStream = new FileStream("nestest.txt", FileMode.Open))
+            using (var stream = new StreamReader(fileStream))
+            {
+                var line = "";
+                while ((line = stream.ReadLine()) != null)
+                {
+                    TestList.Add(new CPUState()
+                    {
+                        PC = line.Substring(0, 4).ToUint(),
+                        //Opcode = Convert.ToUInt16(line.Substring(0, 4)),
+                        A = line.Substring(line.IndexOf("A:") + 2, 2).ToUint(),
+                        X = line.Substring(line.IndexOf("X:") + 2, 2).ToUint(),
+                        Y = line.Substring(line.IndexOf("Y:") + 2, 2).ToUint(),
+                        P = line.Substring(line.IndexOf("P:") + 2, 2).ToUint(),
+                        SP = line.Substring(line.IndexOf("SP:") + 3, 2).ToUint(),
+                    });
+                }
+            }
+
+            return TestList;
+        }
+
+        #endregion
+
+        #region Helpers Methods
+
+        /// <summary>
+        /// Get the current CPU state as <see cref="CPUState"/>
+        /// </summary>
+        /// <returns></returns>
+        public CPUState GetState()
+        {
+            return new CPUState()
+            {
+                PC = PC - 1,
+                Opcode = CurrentOpcode,
+                A = A,
+                X = X,
+                Y = Y,
+                P = P,
+                SP = SP,
+            };
         }
 
         #endregion

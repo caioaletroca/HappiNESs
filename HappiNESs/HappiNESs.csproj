@@ -88,6 +88,7 @@
     <Compile Include="Dialogs\BaseDialog.cs" />
     <Compile Include="Dialogs\BaseDialogUserControl.cs" />
     <Compile Include="DialogWindow.xaml.cs" />
+    <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Helpers\EncryptionHelpers.cs" />
     <Compile Include="Helpers\ExpressionHelpers.cs" />
     <Compile Include="Helpers\MathHelpers.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Logging\Implementation\ConsoleLogger.cs" />
     <Compile Include="Logging\Implementation\DebugLogger.cs" />
     <Compile Include="Logging\Implementation\FileLogger.cs" />
+    <Compile Include="Model\CPUState.cs" />
     <Compile Include="Model\SystemDialogResult.cs" />
     <Compile Include="Serializers\JsonManager.cs" />
     <Compile Include="Serializers\XMLManager.cs" />

@@ -40,7 +40,7 @@ namespace HappiNESs
         {
             // Bind commands
             OpenRomCommand = new ActionCommand(async () => await OpenRomAsync());
-            TestCPUCommand = new ActionCommand(() => TestCPU());
+            TestCPUCommand = new ActionCommand(async () => await TestCPUAsync());
         }
 
         #endregion
@@ -75,9 +75,18 @@ namespace HappiNESs
         /// <summary>
         /// Executes a CPU test
         /// </summary>
-        public void TestCPU()
+        public async Task TestCPUAsync()
         {
-
+            // Run with control flag
+            await RunCommandAsync(() => IsBusy, async () =>
+            {
+                // Run async
+                await IoC.Task.Run(async () =>
+                {
+                    // Load the rom
+                    await IoC.Application.CPUTestAsync();
+                });
+            });
         }
 
         #endregion

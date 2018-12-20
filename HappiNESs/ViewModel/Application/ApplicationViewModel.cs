@@ -40,7 +40,7 @@ namespace HappiNESs
 
         #endregion
 
-        #region Public Methods
+        #region NES Methods
 
         /// <summary>
         /// Loads a rom from a file
@@ -65,7 +65,22 @@ namespace HappiNESs
                 // Log
                 IoC.Logger.Log($"The program was unauthorized to open the file {path}", LogLevel.Error);
             }
-            
+        }
+
+        /// <summary>
+        /// Test the <see cref="CPU"/> if all is running correctly
+        /// </summary>
+        /// <returns></returns>
+        public async Task CPUTestAsync()
+        {
+            // Log
+            IoC.Logger.Log("The CPU test has started");
+
+            // Run test
+            if (NES.CPUTest())
+                IoC.Logger.Log("CPU is running successful.", LogLevel.Success);
+            else
+                IoC.Logger.Log("A error occurred in CPU.", LogLevel.Error);
         }
 
         #endregion

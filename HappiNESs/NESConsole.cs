@@ -1,4 +1,8 @@
-﻿namespace HappiNESs
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace HappiNESs
 {
     /// <summary>
     /// Handles and contains all the NES emulation components
@@ -56,6 +60,23 @@
         public void LoadState()
         {
 
+        }
+
+        #endregion
+
+        #region Components Test
+
+        /// <summary>
+        /// Runs the nestest.nes to Test the CPU opcodes
+        /// </summary>
+        public bool CPUTest()
+        {
+            // Loads the test rom
+            LoadRom(@"Roms\nestest.nes");
+            CPU.Initialize();
+
+            // Return the results
+            return CPU.CPUTest();
         }
 
         #endregion
