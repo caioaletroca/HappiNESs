@@ -61,6 +61,8 @@ namespace HappiNESs
                 {
                     TestPC.Add(line.Substring(0, line.IndexOf(" ")));
                     TestA.Add(line.Substring(line.IndexOf("A:") + 2, 2));
+                    TestX.Add(line.Substring(line.IndexOf("X:") + 2, 2));
+                    TestY.Add(line.Substring(line.IndexOf("Y:") + 2, 2));
                     TestP.Add(line.Substring(line.IndexOf("P:") + 2, 2));
                     TestSP.Add(line.Substring(line.IndexOf("SP:") + 3, 2));
                 }
@@ -75,6 +77,8 @@ namespace HappiNESs
 
         public List<string> TestPC { get; set; } = new List<string>();
         public List<string> TestA { get; set; } = new List<string>();
+        public List<string> TestX { get; set; } = new List<string>();
+        public List<string> TestY { get; set; } = new List<string>();
         public List<string> TestP { get; set; } = new List<string>();
         public List<string> TestSP { get; set; } = new List<string>();
 
@@ -101,6 +105,8 @@ namespace HappiNESs
             if (
                 (PC - 1).ToString("X4") != TestPC[CurrentLine] ||
                 A.ToString("X2") != TestA[CurrentLine] ||
+                X.ToString("X2") != TestX[CurrentLine] ||
+                Y.ToString("X2") != TestY[CurrentLine] ||
                 P.ToString("X2") != TestP[CurrentLine] ||
                 SP.ToString("X2") != TestSP[CurrentLine]
             )

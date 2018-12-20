@@ -46,17 +46,17 @@ namespace HappiNESs
         [OpcodeDefinition(Opcode = 0xB9, Mode = AbsoluteY, Cycles = 4, PageBoundary = true)]
         [OpcodeDefinition(Opcode = 0xA1, Mode = IndirectX, Cycles = 6)]
         [OpcodeDefinition(Opcode = 0xB1, Mode = IndirectY, Cycles = 5, PageBoundary = true)]
-        private void LDA() => HandleFlags(A = AddressRead());
+        private void LDA() => A = AddressRead();
 
         /// <summary>
         /// Load to X register
         /// </summary>
         [OpcodeDefinition(Opcode = 0xA2, Mode = Immediate)]
         [OpcodeDefinition(Opcode = 0xA6, Mode = ZeroPage, Cycles = 3)]
-        [OpcodeDefinition(Opcode = 0xB6, Mode = ZeroPageX, Cycles = 4)]
+        [OpcodeDefinition(Opcode = 0xB6, Mode = ZeroPageY, Cycles = 4)]
         [OpcodeDefinition(Opcode = 0xAE, Mode = Absolute, Cycles = 4)]
-        [OpcodeDefinition(Opcode = 0xBE, Mode = AbsoluteX, Cycles = 4, PageBoundary = true)]
-        private void LDX() => HandleFlags(X = AddressRead());
+        [OpcodeDefinition(Opcode = 0xBE, Mode = AbsoluteY, Cycles = 4, PageBoundary = true)]
+        private void LDX() => X = AddressRead();
 
         /// <summary>
         /// Load to Y register
@@ -66,7 +66,7 @@ namespace HappiNESs
         [OpcodeDefinition(Opcode = 0xB4, Mode = ZeroPageX, Cycles = 4)]
         [OpcodeDefinition(Opcode = 0xAC, Mode = Absolute, Cycles = 4)]
         [OpcodeDefinition(Opcode = 0xBC, Mode = AbsoluteX, Cycles = 4, PageBoundary = true)]
-        private void LDY() => HandleFlags(Y = AddressRead());
+        private void LDY() => Y = AddressRead();
 
         /// <summary>
         /// Store accumulator on address
@@ -84,7 +84,7 @@ namespace HappiNESs
         /// Store X register on address
         /// </summary>
         [OpcodeDefinition(Opcode = 0x86, Mode = ZeroPage, Cycles = 3)]
-        [OpcodeDefinition(Opcode = 0x96, Mode = ZeroPageX, Cycles = 4)]
+        [OpcodeDefinition(Opcode = 0x96, Mode = ZeroPageY, Cycles = 4)]
         [OpcodeDefinition(Opcode = 0x8E, Mode = Absolute, Cycles = 4)]
         private void STX() => AddressWrite(X);
 
@@ -201,13 +201,13 @@ namespace HappiNESs
         /// Increment X by one
         /// </summary>
         [OpcodeDefinition(Opcode = 0xE8)]
-        private void INX() => HandleFlags(X++);
+        private void INX() => X++;
 
         /// <summary>
         /// Increment Y by one
         /// </summary>
         [OpcodeDefinition(Opcode = 0xC8)]
-        private void INY() => HandleFlags(Y++);
+        private void INY() => Y++;
 
         /// <summary>
         /// Subtract A and M with carry
@@ -220,7 +220,7 @@ namespace HappiNESs
         [OpcodeDefinition(Opcode = 0xF9, Mode = AbsoluteY, Cycles = 4, PageBoundary = true)]
         [OpcodeDefinition(Opcode = 0xE1, Mode = IndirectX, Cycles = 6)]
         [OpcodeDefinition(Opcode = 0xF1, Mode = IndirectY, Cycles = 5, PageBoundary = true)]
-        private void SBC() => ADCInstruction(~AddressRead());
+        private void SBC() => ADCInstruction((byte)~AddressRead());
 
         /// <summary>
         /// Implements only the sum part of the opcode
@@ -233,7 +233,7 @@ namespace HappiNESs
 
             // Set flags
             Flags.Overflow = newValue < -128 || newValue > 127;
-            Flags.Carry = A + Value + (Flags.Carry ? 1 : 0) > 0xFF;
+            Flags.Carry = (A + Value + (Flags.Carry ? 1 : 0)) > 0xFF;
 
             // Set Accumulator
             A = (byte)(newValue & 0xFF);
@@ -677,8 +677,6 @@ namespace HappiNESs
 
         #region Unofficial Instructions
 
-        // TODO: Implement Unofficial opcodes
-
         /// <summary>
         /// AND Byte with the accumulator
         /// </summary>
@@ -706,7 +704,7 @@ namespace HappiNESs
         }
 
         /// <summary>
-        /// Subtract M without borrow
+        /// Subtract M without borrow and compare, DEC + CMP
         /// </summary>
         [OpcodeDefinition(Opcode = 0xC7, Mode = ZeroPage, Cycles = 5)]
         [OpcodeDefinition(Opcode = 0xD7, Mode = ZeroPageX, Cycles = 6)]
@@ -718,10 +716,18 @@ namespace HappiNESs
         private void DCP()
         {
             // Gets M value
-            var newValue = AddressRead() - 1;
+            var Value = (uint)((int)AddressRead() - 1) & 0xFF;
+;
+            // Compare
+            var result = A - (int)Value;
+
+            // Update flags
+            Flags.Negative = (result & 0x80) > 0 && result != 0;
+            Flags.Carry = result >= 0;
+            Flags.Zero = result == 0;
 
             // Write new value
-            AddressWrite(newValue);
+            AddressWrite(Value);
         }
 
         /// <summary>
@@ -742,6 +748,35 @@ namespace HappiNESs
         [OpcodeDefinition(Opcode = 0xE2, Mode = Immediate)]
         [OpcodeDefinition(Opcode = 0xF4, Mode = ZeroPageX, Cycles = 4)]
         private void DOP() => NextByte();
+
+        /// <summary>
+        /// Increase memory by one, then subtract memory from accu-mulator (with borrow), INC + SBC
+        /// </summary>
+        [OpcodeDefinition(Opcode = 0xE7, Mode = ZeroPage, Cycles = 5)]
+        [OpcodeDefinition(Opcode = 0xF7, Mode = ZeroPageX, Cycles = 6)]
+        [OpcodeDefinition(Opcode = 0xEF, Mode = Absolute, Cycles = 6)]
+        [OpcodeDefinition(Opcode = 0xFF, Mode = AbsoluteX, Cycles = 7, PageBoundary = true)]
+        [OpcodeDefinition(Opcode = 0xFB, Mode = AbsoluteY, Cycles = 7, PageBoundary = true)]
+        [OpcodeDefinition(Opcode = 0xE3, Mode = IndirectX, Cycles = 8)]
+        [OpcodeDefinition(Opcode = 0xF3, Mode = IndirectY, Cycles = 8, PageBoundary = true)]
+        private void ISB()
+        {
+            // Get and increment memory
+            var Value = (AddressRead() + 1) & 0xFF;
+
+            // Sum with overflow
+            var result = A + ~(int)Value + Flags.Carry.ToInt();
+
+            // Set flags
+            Flags.Overflow = ((A ^ Value) & (A ^ result) & 0x80) > 0;
+            Flags.Carry = !((result & 0x100) > 0);
+
+            // Set Accumulator
+            A = (byte)(result & 0xFF);
+
+            // Write new value
+            AddressWrite(Value);
+        }
 
         /// <summary>
         /// AND M with SP, than transfer to accumulator, X and SP
@@ -785,7 +820,7 @@ namespace HappiNESs
         private void NOP2() { }
 
         /// <summary>
-        /// Rotate one bit left from M, then AND the accumulator with M
+        /// Rotate one bit left from M, then AND the accumulator with M, ROL + AND
         /// </summary>
         [OpcodeDefinition(Opcode = 0x27, Mode = ZeroPage, Cycles = 5)]
         [OpcodeDefinition(Opcode = 0x37, Mode = ZeroPageX, Cycles = 6)]
@@ -807,12 +842,11 @@ namespace HappiNESs
             newValue = newValue <<= 1;
 
             if (Carry) newValue |= 0x1;
-            HandleFlags(newValue);
+
+            A &= newValue;
 
             // Write the new value
-            AddressWrite(newValue & A);
-
-            // TODO: Check this opcode
+            AddressWrite(newValue);
         }
 
         /// <summary>
@@ -838,19 +872,21 @@ namespace HappiNESs
             newValue = newValue >>= 1;
 
             if (Carry) newValue |= 0x80;
-            HandleFlags(newValue);
 
             // Adds the new value
             ADCInstruction(newValue);
+
+            // Write new value
+            AddressWrite(newValue);
         }
 
         /// <summary>
         /// Stores AND between A and X
         /// </summary>
-        [OpcodeDefinition(Opcode = 0x83, Mode = ZeroPage, Cycles = 3)]
-        [OpcodeDefinition(Opcode = 0x87, Mode = Absolute, Cycles = 4)]
-        [OpcodeDefinition(Opcode = 0x8F, Mode = IndirectX, Cycles = 6)]
-        [OpcodeDefinition(Opcode = 0x97, Mode = IndirectY, Cycles = 4, PageBoundary = true)]
+        [OpcodeDefinition(Opcode = 0x87, Mode = ZeroPage, Cycles = 3)]
+        [OpcodeDefinition(Opcode = 0x97, Mode = ZeroPageY, Cycles = 3)]
+        [OpcodeDefinition(Opcode = 0x8F, Mode = Absolute, Cycles = 4)]
+        [OpcodeDefinition(Opcode = 0x83, Mode = IndirectX, Cycles = 6)]
         private void SAX()
         {
             // Spend value
@@ -867,7 +903,7 @@ namespace HappiNESs
         private void SBC2() => SBC();
 
         /// <summary>
-        /// Shift left one bit in memory, then OR accumulator with memory
+        /// Shift left one bit in memory, then OR accumulator with memory, ASL + ORA
         /// </summary>
         [OpcodeDefinition(Opcode = 0x07, Mode = ZeroPage, Cycles = 5)]
         [OpcodeDefinition(Opcode = 0x17, Mode = ZeroPageX, Cycles = 6)]
@@ -884,14 +920,13 @@ namespace HappiNESs
             // Update Flags
             Flags.Carry = (Value & 0x80) > 0;
 
+            // Shift data
             Value <<= 1;
 
-            HandleFlags(Value);
+            A |= Value;
 
             // Write back to memory
-            AddressWrite(Value | A);
-
-            // TODO: Test this opcode
+            AddressWrite(Value);
         }
 
         /// <summary>
@@ -915,12 +950,10 @@ namespace HappiNESs
             // Shift value
             newValue >>= 1;
 
-            HandleFlags(newValue);
+            A ^= newValue;
 
             // Write the new value
-            AddressWrite(newValue ^ A);
-
-            // TODO: Test this opcode
+            AddressWrite(newValue);
         }
 
         /// <summary>
