@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 
 namespace HappiNESs
 {
@@ -13,5 +7,46 @@ namespace HappiNESs
     /// </summary>
     public partial class App : Application
     {
+        #region WPF Events
+
+        /// <summary>
+        /// Custom startup so we load our IoC immediately before anything else
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            // Let the base application do what it needs
+            base.OnStartup(e);
+
+            // Setup the main application
+            ApplicationSetup();
+
+            // Log it
+            IoC.Logger.Log("Iniciando aplicação.", LogLevel.Informative);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Configures application ready for use
+        /// </summary>
+        private void ApplicationSetup()
+        {
+            // Setup IoC
+            IoC.Setup();
+
+            // Bind a logger
+            IoC.Kernel.Bind<ILogFactory>().ToConstant(new BaseLogFactory());
+
+            // Bind a task manager
+            IoC.Kernel.Bind<ITaskManager>().ToConstant(new TaskManager());
+
+            // Fire Start Event
+            IoC.OnStart();
+        }
+
+        #endregion
     }
 }

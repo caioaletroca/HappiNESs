@@ -61,6 +61,10 @@ namespace HappiNESs
 
         #region Memory Methods
 
+        /// <summary>
+        /// Parse the current address mode
+        /// </summary>
+        /// <returns></returns>
         private uint ParseMemoryAddress()
         {
             var def = OpcodeDefinitions[CurrentOpcode];

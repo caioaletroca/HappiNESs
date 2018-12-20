@@ -9,6 +9,9 @@ namespace HappiNESs
     {
         #region Private Properties
 
+        /// <summary>
+        /// Control flags for interruptions
+        /// </summary>
         private readonly bool[] Interrupts = new bool[2];
 
         /// <summary>

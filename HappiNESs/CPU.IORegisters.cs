@@ -9,7 +9,8 @@ namespace HappiNESs
         {
             switch(Register)
             {
-                
+                default:
+                    break;
             }
 
             if (Register <= 0x401F) return;

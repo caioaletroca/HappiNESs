@@ -30,14 +30,14 @@ namespace HappiNESs
 
         #region Delegates
 
+        /// <summary>
+        /// Opcode delegate
+        /// </summary>
         public delegate void Opcode();
 
         #endregion
 
         #region Private Properties
-
-
-        private readonly NESConsole NESConsole;
 
         /// <summary>
         /// The array containing all the CPU opcodes
@@ -61,8 +61,6 @@ namespace HappiNESs
             InitializeMemoryMap();
             InitializeOpcodes();
             Initialize();
-
-            NESConsole = console;
         }
 
         /// <summary>
