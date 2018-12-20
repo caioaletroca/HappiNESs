@@ -57,6 +57,15 @@
     <Reference Include="PropertyChanged, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.2.6.0\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
+    <Reference Include="SharpGL, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpGL.SceneGraph, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.SceneGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpGL.WPF, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpGL.WPF.2.4.0.0\lib\net40\SharpGL.WPF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
@@ -88,6 +97,9 @@
     <Compile Include="Dialogs\BaseDialog.cs" />
     <Compile Include="Dialogs\BaseDialogUserControl.cs" />
     <Compile Include="DialogWindow.xaml.cs" />
+    <Compile Include="EmulatorScreen.xaml.cs">
+      <DependentUpon>EmulatorScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Helpers\EncryptionHelpers.cs" />
     <Compile Include="Helpers\ExpressionHelpers.cs" />
@@ -126,6 +138,10 @@
     <Page Include="DialogWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="EmulatorScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
