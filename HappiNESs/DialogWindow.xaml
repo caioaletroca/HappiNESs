@@ -1,0 +1,15 @@
+﻿<local:BaseDialog x:Class="HappiNESs.DialogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HappiNESs"
+        mc:Ignorable="d"
+        SizeToContent="WidthAndHeight"
+        Title="{Binding Title, FallbackValue='New Dialog'}" d:DesignHeight="400" d:DesignWidth="400"
+        ResizeMode="NoResize" AllowDrop="True" Topmost="{Binding TopMost}"
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <ContentControl Content="{Binding Content}" />
+    </Grid>
+</local:BaseDialog>

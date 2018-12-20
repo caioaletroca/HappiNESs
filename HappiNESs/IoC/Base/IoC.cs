@@ -17,7 +17,7 @@ namespace HappiNESs
         /// <summary>
         /// A shortcut to access the <see cref="IUIManager"/>
         /// </summary>
-        //public static IUIManager UI => IoC.Get<IUIManager>();
+        public static IUIManager UI => IoC.Get<IUIManager>();
 
         /// <summary>
         /// A shortcut to access the <see cref="ILogFactory"/>

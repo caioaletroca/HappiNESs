@@ -43,6 +43,9 @@ namespace HappiNESs
             // Bind a task manager
             IoC.Kernel.Bind<ITaskManager>().ToConstant(new TaskManager());
 
+            // Bind a ui manager
+            IoC.Kernel.Bind<IUIManager>().ToConstant(new UIManager());
+
             // Fire Start Event
             IoC.OnStart();
         }

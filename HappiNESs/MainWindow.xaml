@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HappiNESs"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="HappiNESs" Height="300" Width="450">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Menu Strip -->
+        <local:MenuStripControl Grid.Row="0" />
         
     </Grid>
 </Window>
