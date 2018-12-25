@@ -23,6 +23,10 @@ namespace HappiNESs
 
         #endregion
 
+        public const int GameWidth = 256;
+        public const int GameHeight = 240;
+        public uint[] rawBitmap = new uint[GameWidth * GameHeight];
+
         #region WPF Events
 
         /// <summary>

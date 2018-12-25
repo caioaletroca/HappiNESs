@@ -1,6 +1,6 @@
 language: csharp
 solution: HappiNESs.sln
-dotnet: 4.6.1
+dotnet: 4.6.0
 script:
  - dotnet restore
  - msbuild /p:Configuration=Release solution-name.sln

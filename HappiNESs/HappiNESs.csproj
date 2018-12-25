@@ -96,6 +96,7 @@
       <DependentUpon>MenuStripControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModels\ApplicationConstants.cs" />
+    <Compile Include="DataModels\ColorPalette.cs" />
     <Compile Include="DataModels\DialogResultType.cs" />
     <Compile Include="DataModels\DialogWindowType.cs" />
     <Compile Include="Dialogs\BaseDialog.cs" />
