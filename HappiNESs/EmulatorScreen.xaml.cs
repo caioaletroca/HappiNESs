@@ -1,25 +1,15 @@
 ﻿using SharpGL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using SharpGL.Enumerations;
+using SharpGL.SceneGraph.Assets;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace HappiNESs
 {
     /// <summary>
     /// Interação lógica para EmulatorScreen.xam
     /// </summary>
-    public partial class EmulatorScreen : UserControl
+    public partial class EmulatorScreen : OpenGLRenderer
     {
         #region Constructor
 
@@ -33,9 +23,32 @@ namespace HappiNESs
 
         #endregion
 
+        #region WPF Events
+
+        /// <summary>
+        /// Fires when OpenGL is initialized
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
+        private void OpenGLControl_OpenGLInitialized(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
+        {
+            // Initialize instance
+            GL = args.OpenGL;
+
+            // Initialize Renderer
+            Initialize();
+        }
+
+        /// <summary>
+        /// Fires on every OpenGL draw
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         private void OpenGLControl_OpenGLDraw(object sender, SharpGL.SceneGraph.OpenGLEventArgs args)
         {
-
+            Draw();
         }
+
+        #endregion
     }
 }

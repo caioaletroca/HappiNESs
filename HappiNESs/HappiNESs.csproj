@@ -57,6 +57,9 @@
     <Reference Include="PropertyChanged, Version=2.6.0.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.2.6.0\lib\net452\PropertyChanged.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
+    </Reference>
     <Reference Include="SharpGL, Version=2.4.0.0, Culture=neutral, PublicKeyToken=27fc851303210b27, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpGL.2.4.0.0\lib\net40\SharpGL.dll</HintPath>
     </Reference>
@@ -68,6 +71,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -100,6 +104,8 @@
     <Compile Include="EmulatorScreen.xaml.cs">
       <DependentUpon>EmulatorScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Emulator\PPU.cs" />
+    <Compile Include="Extensions\OpenGLExtension.cs" />
     <Compile Include="Extensions\StringExtension.cs" />
     <Compile Include="Helpers\EncryptionHelpers.cs" />
     <Compile Include="Helpers\ExpressionHelpers.cs" />
@@ -116,6 +122,8 @@
     <Compile Include="Logging\Implementation\FileLogger.cs" />
     <Compile Include="Model\CPUState.cs" />
     <Compile Include="Model\SystemDialogResult.cs" />
+    <Compile Include="Renderers\IRenderer.cs" />
+    <Compile Include="Renderers\OpenGLRenderer.cs" />
     <Compile Include="Serializers\JsonManager.cs" />
     <Compile Include="Serializers\XMLManager.cs" />
     <Compile Include="Task\TaskManager.cs" />
